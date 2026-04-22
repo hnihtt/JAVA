@@ -7,16 +7,16 @@ public class Main {
         //B1
         Employee emp = new Employee("Name", "Department", 12000, "Role", "Password", 12000);
 
-        ObjectOutputStream oos = new ObjectOutputStream(new FileOutputStream("emp.txt"));
+        ObjectOutputStream oos = new ObjectOutputStream(new FileOutputStream("./src/SerializationNLambda/emp.txt"));
         oos.writeObject(emp);
         oos.close();
-        ObjectInputStream ois = new ObjectInputStream(new FileInputStream("emp.txt"));
+        ObjectInputStream ois = new ObjectInputStream(new FileInputStream("./src/SerializationNLambda/emp.txt"));
         Employee empR = (Employee) ois.readObject();
         ois.close();
         System.out.println(empR.toString());
 
         //B2
-        BufferedWriter bw = new BufferedWriter(new FileWriter("employees.txt", true));
+        BufferedWriter bw = new BufferedWriter(new FileWriter("./src/SerializationNLambda/employees.txt", true));
         bw.write(empR.getName());
         bw.newLine();
         bw.write(empR.getDepartment());
