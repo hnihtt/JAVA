@@ -1,0 +1,6 @@
+OrderID,Product,Quantity,Price
+001,     Laptop,2,15000000
+002,Phone,,8000000
+003,Tablet,abc,5000000
+004,Watch,1,-500000
+005,Headphone,3,2000000
