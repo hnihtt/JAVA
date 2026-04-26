@@ -25,7 +25,7 @@ public class Main {
             }
         };
 
-        Thread thread3 = new Thread(System.out::println);
+        Thread thread3 = new Thread(() -> System.out.println("Hello"));
 
         thread.start();
         thread2.start();
