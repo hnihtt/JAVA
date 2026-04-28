@@ -1,4 +1,4 @@
-package Threading.Theory;
+package Threading;
 
 public class MultiThreading extends Thread {
 

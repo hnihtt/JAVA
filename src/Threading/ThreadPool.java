@@ -1,4 +1,4 @@
-package Threading.Theory;
+package Threading;
 
 import java.util.concurrent.*;
 

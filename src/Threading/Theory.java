@@ -1,6 +1,4 @@
-package Threading.Theory;
-
-import java.util.concurrent.Callable;
+package Threading;
 
 public class Theory {
     public static void main(String[] args) {
