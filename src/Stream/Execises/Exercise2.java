@@ -1,0 +1,55 @@
+package Stream.Execises;
+
+import java.util.*;
+import java.util.stream.Collectors;
+
+public class Exercise2 {
+    public static void main(String[] args) {
+        record Order(String id, double amount, String status) {
+            @Override
+            public String id() {
+                return id;
+            }
+
+            @Override
+            public double amount() {
+                return amount;
+            }
+
+            @Override
+            public String status() {
+                return status;
+            }
+
+            @Override
+            public String toString() {
+                return "Order{" +
+                        "id='" + id + '\'' +
+                        ", amount=" + amount +
+                        ", status='" + status + '\'' +
+                        '}';
+            }
+        }
+
+        List<Order> orders = List.of(
+                new Order("O1", 150_000, "PAID"),
+                new Order("O2",  80_000, "PENDING"),
+                new Order("O3", 200_000, "PAID"),
+                new Order("O4",  50_000, "CANCELLED"),
+                new Order("O5", 120_000, "PENDING")
+        );
+
+        Double totalPaidAmount = orders.stream().filter(order -> order.status.equals("PAID")).mapToDouble(Order::amount).sum();
+        System.out.println(totalPaidAmount);
+
+        OptionalDouble highestValue = orders.stream().mapToDouble(Order::amount).max();
+        highestValue.ifPresentOrElse(System.out::println, () -> System.out.println("Khong co"));
+
+        Order highestValueOrder = orders.stream().max(Comparator.comparingDouble(Order::amount)).orElse(null);
+        System.out.println(highestValueOrder);
+
+        Map<String, Long> countByStatus = orders.stream().collect(Collectors.groupingBy(Order::status, Collectors.counting()));
+        System.out.println(countByStatus);
+
+    }
+}
