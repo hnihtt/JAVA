@@ -26,5 +26,7 @@ public class Exercise1 {
 
         List<String> studentsWithHighGpa = students.stream().filter(Student -> Student.gpa >= 3.5).map(Student::name).sorted().toList();
         System.out.println(studentsWithHighGpa);
+
+        StringBuffer
     }
 }
