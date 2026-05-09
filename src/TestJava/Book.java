@@ -1,20 +1,22 @@
 package TestJava;
 
-public class Book {
+public class Book implements Comparable<Book>{
     private String id;
     private String title;
     private String author;
+    private String category;
     private int quantity;
-    private int count = 0;
+    private int borrowCount = 0;
 
     public Book() {
 
     }
 
-    public Book(String id, String title, String author, int quantity) {
+    public Book(String id, String title, String author, String category, int quantity) {
         this.id = id;
         this.title = title;
         this.author = author;
+        this.category = category;
         this.quantity = quantity;
     }
 
@@ -34,8 +36,12 @@ public class Book {
         return quantity;
     }
 
-    public int getCount() {
-        return count;
+    public int getBorrowCount() {
+        return borrowCount;
+    }
+
+    public String getCategory() {
+        return category;
     }
 
     public void setId(String id) {
@@ -50,6 +56,10 @@ public class Book {
         this.author = author;
     }
 
+    public void setCategory(String category) {
+        this.category = category;
+    }
+
     public void setQuantity(int quantity) {
         if (quantity < 0) {
             throw new IllegalArgumentException("Quantity khong duoc nho hon 0");
@@ -58,7 +68,7 @@ public class Book {
     }
 
     public void setCount(int count) {
-        this.count = count;
+        this.borrowCount = count;
     }
 
     @Override
@@ -67,8 +77,14 @@ public class Book {
                 "id='" + id + '\'' +
                 ", title='" + title + '\'' +
                 ", author='" + author + '\'' +
+                ", category='" + category + '\'' +
                 ", quantity=" + quantity +
-                ", count=" + count +
+                ", Borrow count=" + borrowCount +
                 '}';
+    }
+
+    @Override
+    public int compareTo(Book book) {
+        return this.getTitle().compareTo(book.getTitle());
     }
 }

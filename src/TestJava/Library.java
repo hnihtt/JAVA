@@ -6,6 +6,9 @@ import java.util.stream.Collectors;
 public class Library {
     public HashMap<String, Book> books = new HashMap<>();
     public final List<Reader> readers = new ArrayList<>();
+    public final Catalog<Reader> readersCatalog = new Catalog<Reader>();
+
+    public final List<BorrowRecord> records= new ArrayList<>();
 
     public void addBook(Book book) {
         if (books.containsKey(book.getId())) {
@@ -14,7 +17,6 @@ public class Library {
             books.put(book.getId(), book);
         }
     }
-
 
     public void removeBook(String id) {
         if (books.containsKey(id)) {
@@ -32,10 +34,10 @@ public class Library {
    }
 
    public void addReader(Reader reader) {
-        if (readers.stream().anyMatch(x -> x.getReaderId().equals(reader.getReaderId()))) {
+        if (readersCatalog.getAll().stream().anyMatch(x -> x.getReaderId().equals(reader.getReaderId()))) {
             System.out.println("Da co reader trong list");
         } else {
-            readers.add(reader);
+            readersCatalog.add(reader);
         }
    }
 
@@ -47,8 +49,18 @@ public class Library {
         return books.values().stream().filter(book -> book.getAuthor().equals(author)).toList();
    }
 
+   public Map<String, List<Book>> getBooksByCategory() {
+        return books.values().stream().collect(Collectors.groupingBy(Book::getCategory));
+   }
 
    public List<Book> getTop3MostBorrowed() {
-        return books.values().stream().sorted(Comparator.comparingInt(Book::getCount).reversed()).toList();
+        return books.values().stream().sorted(Comparator.comparingInt(Book::getBorrowCount).reversed()).toList();
    }
+
+    public List<Book> getSortedBooks(Comparator<Book> comparator) {
+        return books.values()
+                .stream()
+                .sorted(comparator)
+                .toList();
+    }
 }

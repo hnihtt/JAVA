@@ -15,8 +15,8 @@ public class PremiumReader extends Reader {
     }
 
     @Override
-    public void borrow(Book book) throws BorrowLimitException {
-        if (membershipExpiry.isAfter(LocalDate.now())) {
+    public void borrow(Book book, Library library) throws BorrowLimitException {
+        if (membershipExpiry.isBefore(LocalDate.now())) {
             System.out.println("Het han hoi vien");
             return;
         }
@@ -25,9 +25,16 @@ public class PremiumReader extends Reader {
             throw new BorrowLimitException("Vuot qua gioi han sach duoc muon");
         }
 
+        if (!library.books.containsValue(book)) {
+            System.out.println("Thu vien khong co sach nay");
+            return;
+        }
+
         if (book.getQuantity() > 0) {
             borrowedBooks.add(book);
             book.setQuantity(book.getQuantity() - 1);
+            book.setCount((book.getBorrowCount() + 1));
+            library.records.add(new BorrowRecord(this, book, LocalDate.now(), null, BorrowStatus.BORROWING));
             return;
         }
 
