@@ -33,7 +33,11 @@ public class Reader implements Borrowable, Comparable<Reader> {
     }
 
     @Override
-    public void borrow(Book book, Library library) throws BorrowLimitException {
+    public void borrow(Book book, Library library) throws BorrowLimitException, BorrowBookException {
+        if (!library.readersCatalog.contains(this)) {
+            throw new BorrowBookException("Khong co doc gia nay trong danh sach doc gia tai thu vien nay");
+        }
+
         if (borrowedBooks.size() > 3) {
             throw new BorrowLimitException("Vuot qua gioi han sach duoc muon");
         }

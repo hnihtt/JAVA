@@ -4,9 +4,10 @@ import java.util.ArrayList;
 import java.util.List;
 import java.util.function.Predicate;
 import java.util.stream.Collectors;
+import java.util.stream.Stream;
 
 public class Catalog<T extends Comparable<T>> {
-    private List<T> items = new ArrayList<>();
+    private final List<T> items = new ArrayList<>();
 
     public void add(T item) {
         items.add(item);
@@ -27,5 +28,11 @@ public class Catalog<T extends Comparable<T>> {
                 .collect(Collectors.toList());
     }
 
+    public boolean contains(T item) {
+        return items.contains(item);
+    }
 
+    public Stream<T> stream() {
+        return items.stream();
+    }
 }

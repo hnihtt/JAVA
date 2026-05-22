@@ -10,83 +10,75 @@ public class Main {
     public static void main(String[] args) {
         Library thuVienTang1 = new Library();
 
-        Book book1 = new Book("book1", "title1", "Anh", "category1", 10);
-        Book book2 = new Book("book2", "title2", "Bằng", "category2", 10);
-        Book book3 = new Book("book3", "title4", "Anh", "category2", 10);
-        Book book4 = new Book("book4", "title3", "Bằng", "category2", 10);
+        Book book1 = new Book("b1", "Clean Code", "Robert C. Martin", "Programming", 10);
+        Book book2 = new Book("b2", "Effective Java", "Joshua Bloch", "Programming", 5);
+        Book book3 = new Book("b3", "Atomic Habits", "James Clear", "Self-Help", 7);
+        Book book4 = new Book("b4", "Deep Work", "Cal Newport", "Self-Help", 6);
+        Book book5 = new Book("b5", "The Hobbit", "J.R.R. Tolkien", "Fantasy", 8);
 
 
-        Reader rd = new Reader("readerid1", "readername", "t@gmail.com");
-        Reader rd2 = new Reader("readerid2", "readername", "t@gmail.com");
+        Reader reader1 = new Reader("r1", "Vo Vinh Thinh", "vvt@gmail.com");
+        Reader reader2 = new Reader("r2", "Vo Vinh Binh", "vvb@gmail.com");
+        Reader reader3 = new PremiumReader("r3", "Thanh Truc", "tt@gmail.com", LocalDate.of(2026, 11, 23));
 
-
-        System.out.println("Thêm thử 4 sách vào thư viện:");
         thuVienTang1.addBook(book1);
         thuVienTang1.addBook(book2);
         thuVienTang1.addBook(book3);
         thuVienTang1.addBook(book4);
-        System.out.println(thuVienTang1.books);
+        thuVienTang1.addBook(book5);
+        thuVienTang1.books.values().forEach(System.out::println);
         System.out.println("----------");
 
+        thuVienTang1.addReader(reader1);
+        thuVienTang1.addReader(reader2);
+        thuVienTang1.addReader(reader3);
+        thuVienTang1.readersCatalog.getAll().forEach(System.out::println);
+        System.out.println("----------");
 
-        System.out.println("Cho 2 reader mượn thử");
         try {
-            rd.borrow(book1, thuVienTang1);
-            rd2.borrow(book2, thuVienTang1);
-        } catch (BorrowLimitException e) {
+            reader1.borrow(book1, thuVienTang1);
+            reader2.borrow(book2, thuVienTang1);
+            reader2.borrow(book5, thuVienTang1);
+            reader3.borrow(book5, thuVienTang1);
+            reader3.borrow(book1, thuVienTang1);
+            reader3.borrow(book3, thuVienTang1);
+        } catch (BorrowBookException | BorrowLimitException e) {
             System.out.println(e.getMessage());
         }
-        System.out.println("In thông tin reader sau khi mượn:");
-        System.out.println(rd);
+
+        System.out.println("In thông tin reader sau khi mượn");
+        thuVienTang1.readersCatalog.getAll().forEach(System.out::println);
         System.out.println("----------");
-        System.out.println("Lấy danh sách sách reader đang mượn");
-        rd.getBorrowedBooks().forEach(System.out::println);
+        System.out.println("Lấy danh sách sách reader1 đang mượn");
+        reader1.getBorrowedBooks().forEach(System.out::println);
         System.out.println("----------");
 
-        //TEST VỚI PREMIUM
-        PremiumReader rrd = new PremiumReader("pre-reader", "name", "t@gmail.com", LocalDate.of(2026, 11, 23));
+        System.out.println("Cho reader1 trả và in danh sách sách đang mượn sau khi trả");
+        reader1.returnBook(book1, thuVienTang1);
+        System.out.println(reader1.getBorrowedBooks());
+        System.out.println("----------");
+        System.out.println("Group theo Category");
+        thuVienTang1.getBooksByCategory().forEach((key, value) -> System.out.println(key + " -> " + value));
+        System.out.println("----------");
+        System.out.println("Group theo Author");
+        thuVienTang1.getBooksByAuthor().forEach((key, value) -> System.out.println(key + " -> " + value));
+        System.out.println("----------");
+        long totalBook = thuVienTang1.getBookList().size();
+        System.out.println("Tong so sach cua thu vien: " + totalBook);
+        System.out.println("In id sach va so luot muon");
+        thuVienTang1.getBookList().forEach(x -> System.out.println(x.getId() + " -> " + x.getBorrowCount()));
+        System.out.println("----------");
+        System.out.println("Reader muon sach nhieu nhat");
+        thuVienTang1.readersCatalog.stream().max(Comparator.comparing(rd -> rd.getBorrowedBooks().size()))
+                .ifPresent(System.out::println);
 
-        rd.returnBook(book1, thuVienTang1);
-
-
-        //Chỗ này có khi phải handle xem reader có trong list của thư viện không rồi mới cho mượn phía trên
-        thuVienTang1.addReader(rd);
-        thuVienTang1.addReader(rd2);
-        //xài thử Catalog<T>
-        System.out.println(thuVienTang1.readersCatalog.getAll());
-
-        System.out.println("Tìm book theo ");
-        Book result = thuVienTang1.findBookById("book1");
-        System.out.println(result);
-
-        System.out.println("Tìm book theo title, author, và top 3 borrowedBooks");
-        System.out.println(thuVienTang1.searchByTitle("title1"));
-        System.out.println(thuVienTang1.searchByAuthor("Bằng"));
-        System.out.println(thuVienTang1.getTop3MostBorrowed());
-        System.out.println("Group theo category");
-        System.out.println(thuVienTang1.getBooksByCategory());
-
-        System.out.println("In thử List BorrowRecords");
-        thuVienTang1.records.forEach(System.out::println);
-
-        System.out.println("Thử sort với BookComparator");
-        List<Book> sortedBooks = thuVienTang1.getSortedBooks(new BookComparator());
-        sortedBooks.forEach(System.out::println);
-        System.out.println("-------------");
-        List<Book> sortedBooksWithLambda = thuVienTang1.books.values().stream().sorted(Comparator.comparing(Book::getAuthor).thenComparing(Book::getTitle)).toList();
-        sortedBooksWithLambda.forEach(System.out::println);
-        System.out.println("-------------");
-        /*
-        public static List<BorrowRecord> getOverdueList(Library library) {
-        library.records.stream()
-                .filter(x -> x.getBorrowDate().plusDays(14).isBefore(LocalDate.now()))
-                .filter(x -> x.getStatus() == BorrowStatus.BORROWING).forEach(book -> book.setStatus(BorrowStatus.OVERDUE));
-
-        return library.records.stream()
-                .filter(x -> x.getStatus() == BorrowStatus.OVERDUE).toList();
-        };
-         */
 
         BorrowRecord.getOverdueList(thuVienTang1).forEach(System.out::println);
+
+        thuVienTang1.exportBooksToCSV("./src/TestJava/FileOutput/books.csv");
+        thuVienTang1.getBookList().forEach(System.out::println);
+        System.out.println("-------------");
+        thuVienTang1.importBooksFromCSV("./src/TestJava/FileOutput/importBooksTest.csv");
+        thuVienTang1.getBookList().forEach(System.out::println);
     }
 }
